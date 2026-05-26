@@ -1,0 +1,35 @@
+name: CI Backend NestJS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar lint si existe
+        run: npm run lint --if-present
+
+      - name: Ejecutar pruebas si existen
+        run: npm run test --if-present
+
+      - name: Compilar backend
+        run: npm run build
